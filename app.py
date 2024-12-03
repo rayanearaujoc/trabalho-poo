@@ -497,13 +497,6 @@ def concluir_projeto(id):
 def departamentos():
     return render_template('departamentos.html')
 
-@app.route('/pessoas')
-def pessoas():
-    return render_template('pessoas.html')
-
-@app.route('/employee')
-def employee():
-    return render_template('funcionarios.html')
 
 @app.route('/entidade_externa')
 def entidade_externa():
@@ -619,6 +612,178 @@ def excluir_projeto(id):
     else:
         flash("Projeto não encontrado.", 'danger')
     return redirect(url_for('gerenciar_projetos'))
+
+class Pessoas:
+    def __init__(self, nome, cpf, cnpj, email, celular, endereco, nascimento, atribuicao):
+        self.nome = nome
+        self.__cpf = cpf
+        self.__cnpj = cnpj
+        self.__email = email
+        self.__celular = celular
+        self.__endereco = endereco
+        self.__nascimento = nascimento
+        self.atribuicao = atribuicao
+        self.cadastro = []
+
+    @property
+    def cpf(self):
+     return self.__cpf
+
+    @cpf.setter
+    def cpf(self, cpf):
+     self.__cpf = cpf
+
+    @property
+    def cnpj(self):
+     return self.__cnpj
+
+    @cnpj.setter
+    def cnpj(self, cnpj):
+     self.__cnpj = cnpj
+
+    @property
+    def email(self):
+     return self.__email
+
+    @email.setter
+    def email(self, email):
+     self.__email = email
+
+    @property
+    def celular(self):
+     return self.__celular
+
+    @celular.setter
+    def celular(self, celular):
+     self.__celular = celular
+
+    @property
+    def endereco(self):
+      return self.__endereco
+
+    @endereco.setter
+    def endereco(self, endereco):
+      self.__endereco = endereco
+
+    @property
+    def nascimento(self):
+      return self.__nascimento
+
+    @nascimento.setter
+    def nascimento(self, nascimento):
+     self.__nascimento = nascimento
+
+    def registrar(self):
+        self.cadastro.append({
+            "nome": self.nome,
+            "cpf": self.__cpf,
+            "cnpj": self.__cnpj,
+            "email": self.__email,
+            "celular": self.__celular,
+            "endereco": self.__endereco,
+            "nascimento": self.__nascimento,
+            "atribuicao": self.atribuicao
+        })
+        print(f"Pessoa {self.nome} registrada com sucesso!")
+
+@app.route('/pessoas', methods=['GET', 'POST'])
+def cadastrar_pessoas():
+    if request.method == 'POST':
+        nome = request.form.get('nome_pessoa')
+        cpf = request.form.get('cpf_pessoa')
+        cnpj = request.form.get('cnpj_pessoa')
+        email = request.form.get('email_pessoa')
+        celular = request.form.get('celular_pessoa')
+        endereco = request.form.get('endereco_pessoa')
+        nascimento = request.form.get('nascimento_pessoa')
+        atribuicao = request.form.get('atribuicao_pessoa')
+
+        if not all([nome, cpf, cnpj, email, celular, endereco, nascimento, atribuicao]):
+            flash("Todos os campos são obrigatórios!", "danger")
+            return render_template('pessoas.html')  # Não redireciona, renderiza a página novamente
+
+        pessoa = Pessoas(nome, cpf, cnpj, email, celular, endereco, nascimento, atribuicao)
+        pessoa.registrar()
+
+        # Flash para exibição do popup
+        flash(f"Pessoa {nome} registrada com sucesso!", "success")
+        return render_template('pessoas.html')  # Renderiza novamente a página com a mensagem
+
+    return render_template('pessoas.html')
+
+class Funcionarios(Pessoas):
+    def __init__(self, nome, cpf, cnpj, email, celular, endereco, nascimento, atribuicao, cargo, salario, ocupacao, modelo_de_trabalho):
+        super().__init__( nome, cpf, cnpj, email, celular, endereco, nascimento, atribuicao)
+        self.cargo = cargo
+        self.__salario = salario
+        self.ocupacao = ocupacao
+        self.__modelo_de_trabalho = modelo_de_trabalho
+        self.__funcionarios = []
+
+    @property
+    def salario(self):
+        return self.__salario
+
+    @salario.setter
+    def alterar_salario(self, salario):
+        self.__salario = salario
+
+    @property
+    def modelo_de_trabalho(self):
+        return self.__modelo_de_trabalho
+
+    @modelo_de_trabalho.setter
+    def modelo_de_trabalho(self, modelo_de_trabalho):
+        self.__modelo_de_trabalho = modelo_de_trabalho
+
+    def admitir_funcionario(self, funcionario):
+        if not isinstance(funcionario, Funcionarios):
+            raise TypeError("O objeto deve ser uma instância da classe Funcionarios.")
+        self.__funcionarios.append(funcionario)
+        print(f"Funcionário {funcionario.nome} admitido com sucesso!")
+
+@app.route('/employee', methods=['GET', 'POST'])
+def employee():
+    if request.method == 'POST':
+        nome = request.form.get('nome_funcionario')
+        cpf = request.form.get('cpf_funcionario')
+        cnpj = request.form.get('cnpj_funcionario')
+        email = request.form.get('email_funcionario')
+        celular = request.form.get('celular_funcionario')
+        endereco = request.form.get('endereco_funcionario')
+        nascimento = request.form.get('nascimento_funcionario')
+        atribuicao = request.form.get('atribuicao_funcionario')
+        cargo = request.form.get('cargo_funcionario')
+        salario = request.form.get('salario_funcionario')
+        ocupacao = request.form.get('ocupacao_funcionario')
+        modelo_de_trabalho = request.form.get('modelo_de_trabalho_funcionario')
+
+        if not all([nome, cpf, email, celular, endereco, nascimento, atribuicao, cargo, salario, ocupacao, modelo_de_trabalho]):
+            flash("Todos os campos obrigatórios devem ser preenchidos!", "danger")
+            return redirect(url_for('employee'))
+        try:
+            funcionario = Funcionarios(
+                nome=nome,
+                cpf=cpf,
+                cnpj=cnpj,
+                email=email,
+                celular=celular,
+                endereco=endereco,
+                nascimento=nascimento,
+                atribuicao=atribuicao,
+                cargo=cargo,
+                salario=float(salario),
+                ocupacao=ocupacao,
+                modelo_de_trabalho=modelo_de_trabalho
+            )
+            funcionario.admitir_funcionario(funcionario)
+            flash(f"Funcionário {nome} cadastrado com sucesso!", "success")
+        except Exception as e:
+            flash(f"Erro ao cadastrar funcionário: {str(e)}", "danger")
+
+        return redirect(url_for('employee'))
+
+    return render_template('funcionarios.html')
 
 if __name__ == '__main__':
     with app.app_context():
