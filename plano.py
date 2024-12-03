@@ -1,6 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from servico import Servico
+from extensions import db
 
 class Planos(db.Model):
     id = db.Column(db.Integer, primary_key=True)

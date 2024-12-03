@@ -1,12 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash 
-from flask_sqlalchemy import SQLAlchemy 
 from sqlalchemy import func 
-import random
 from flask import Flask, render_template
-from datetime import datetime
-from servico import db, Servico
-from plano import db, Planos
-
+from servico import Servico
+from plano import Planos
+from administracao import Administracao
+from extensions import db
+from funcionario import Funcionario
+from contratos import Contrato
+from pessoas import Pessoas
+from departamentos import Projeto
+from entidadeexterna import EntidadeExterna
 
 app = Flask(__name__)
 app.secret_key = 'amoprogramar:)'
@@ -29,22 +32,6 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-
-class Projeto(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nome_do_projeto = db.Column(db.String(100), nullable=False)
-    objetivos = db.Column(db.String(200), nullable=False)
-    membros = db.Column(db.String(200), nullable=False)
-    data_termino = db.Column(db.String(10), nullable=False)
-
-    def __repr__(self):
-        return f"<Projeto {self.nome_do_projeto}>"
-
-
-
-
-
-
 @app.route('/servicos', methods=['GET', 'POST'])
 def servicos():
     if request.method == 'POST':
@@ -55,7 +42,7 @@ def servicos():
 
         print(f"Horário recebido: {horario}") 
         
-        consultor_disponivel = Servico.horario_disponivel(horario)  # Verifica se o horário é permitido
+        consultor_disponivel = Servico.horario_disponivel(horario) 
         servico = Servico(consultor_disponivel=consultor_disponivel, nome_solucao=nome_solucao, 
                           descricao_solucao=descricao_solucao, data=data, horario=horario)
 
@@ -107,158 +94,6 @@ def alterar_plano(plano_id):
     
     return redirect('/planos') 
 
-class Administracao:
-    def __init__(self, id, nome, email, telefone, endereco, data_contratacao, setor, orcamento):
-        self.__id = id
-        self.__nome = nome
-        self.__email = email
-        self.__telefone = telefone
-        self.__endereco = endereco
-        self.__orcamento = orcamento
-        self.funcionarios = []
-
-    @property
-    def id(self):
-        return self.__id
-
-    @id.setter
-    def id(self, id):
-      if len(str(id)) > 10:
-         print("O ID não pode ter mais de 10 dígitos.")
-      self.__id = id
-
-    @property
-    def nome(self):
-        return self.__nome
-
-    @nome.setter
-    def nome(self, nome):
-        self.__nome = nome
-
-    @property
-    def email(self):
-        return self.__email
-
-    @email.setter
-    def email(self, email):
-        self.__email = email
-
-    @property
-    def telefone(self):
-        return self.__telefone
-
-    @telefone.setter
-    def telefone(self, telefone):
-        self.__telefone = telefone
-
-    @property
-    def endereco(self):
-        return self.__endereco
-
-    @endereco.setter
-    def endereco(self, endereco):
-        self.__endereco = endereco
-
-    @property
-    def orcamento(self):
-        return self.__orcamento
-
-    @orcamento.setter
-    def orcamento(self, orcamento):
-        self.__orcamento = orcamento
-
-    def adicionar_funcionario(self, nome, email):
-        # Verifica se o e-mail já está cadastrado
-        if Funcionario.query.filter_by(email=email).first():
-            print(f"O e-mail '{email}' já está cadastrado.")
-            return False  # Indica falha na adição
-
-    # Gera um ID aleatório de 4 dígitos
-        funcionario_id = random.randint(1000, 9999)
-
-        funcionario = Funcionario(id=funcionario_id, nome=nome, email=email)
-        db.session.add(funcionario)
-        db.session.commit()
-        print(f"Funcionário {nome} (ID: {funcionario_id}) adicionado com sucesso.")
-        return True  # Indica sucesso na adição
-    def remover_funcionario(id_funcionario):
-        try:
-            funcionario = Funcionario.query.get(int(id_funcionario))  # Converte para inteiro
-            if funcionario:
-                db.session.delete(funcionario)
-                db.session.commit()
-                print(f"Funcionário com ID {id_funcionario} removido com sucesso.")
-            else:
-                print(f"Funcionário com ID {id_funcionario} não encontrado.")
-        except ValueError:
-            print("ID do funcionário inválido. Certifique-se de enviar um número inteiro.")
-
-
-
-    def atualizar_orcamento(self, novo_orcamento):
-        self.orcamento = novo_orcamento
-        print(f"Orçamento atualizado para {novo_orcamento:.2f}.")
-
-    def gerar_relatorio(self):
-        relatorio = (f"ID: {self.id}\n"
-                     f"Nome: {self.nome}\n"
-                     f"Email: {self.email}\n"
-                     f"Telefone: {self.telefone}\n"
-                     f"Endereço: {self.endereco}\n"
-                     f"Orçamento: {self.orcamento:.2f}\n"
-                     f"Funcionários: {', '.join(self.funcionarios) if self.funcionarios else 'Nenhum funcionário cadastrado.'}")
-        return relatorio
-
-    def consultar_funcionario(self, funcionario):
-        if funcionario in self.funcionarios:
-            print(f"Funcionário {funcionario} está no setor {self.setor}.")
-        else:
-            print(f"Funcionário {funcionario} não encontrado.")
-
-    def enviar_email(self, destinatario, assunto, mensagem):
-        print(f"Enviando email para {destinatario}...\nAssunto: {assunto}\nMensagem: {mensagem}\nEmail enviado com sucesso.")
-
-    def planejar_reuniao(self, data, hora, local):
-        print(f"Reunião planejada para {data} às {hora} no local: {local}.")
-
-
-class Departamento:
-    def __init__(self, nome, setor, email, telefone):
-        self.nome = nome
-        self.setor = setor
-        self.email = email
-        self.telefone = telefone
-        self.funcionarios = []
-        self.projetos = []
-        self.gerente = None
-
-    def adicionar_funcionario(self, funcionario):
-        self.funcionarios.append(funcionario)
-        print(f"Funcionário {funcionario} adicionado ao departamento {self.nome}.")
-
-    def remover_funcionario(self, funcionario):
-        if funcionario in self.funcionarios:
-            self.funcionarios.remove(funcionario)
-            print(f"Funcionário {funcionario} removido do departamento {self.nome}.")
-        else:
-            print(f"Funcionário {funcionario} não encontrado no departamento {self.nome}.")
-
-    def atribuir_gerente(self, gerente):
-        self.gerente = gerente
-        print(f"Gerente {gerente} atribuído ao departamento {self.nome}.")
-
-    def iniciar_projeto(self, nome_projeto):
-        self.projetos.append({'nome': nome_projeto, 'status': 'em andamento'})
-        print(f"Projeto '{nome_projeto}' iniciado no departamento {self.nome}.")
-
-    def concluir_projeto(self, nome_projeto):
-        for projeto in self.projetos:
-            if projeto['nome'] == nome_projeto and projeto['status'] == 'em andamento':
-                projeto['status'] = 'concluído'
-                print(f"Projeto '{nome_projeto}' concluído no departamento {self.nome}.")
-                return
-        print(f"Projeto '{nome_projeto}' não encontrado ou já concluído.")
-
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_dashboard():
     if 'usuario' not in session:
@@ -278,12 +113,6 @@ def planejar_reuniao():
 @app.route("/atualizar_orcamento", methods=["POST"])
 def atualizar_orcamento():
     return render_template("administracao.html", funcionarios=Funcionario.query.all(), mensagem="Orçamento Atualizado!")
-
-
-class Funcionario(db.Model):
-    id = db.Column(db.Integer, primary_key=True)  # Sem autoincrement
-    nome = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
 
 @app.route('/adicionar_funcionario', methods=['POST'])
 def adicionar_funcionario():
@@ -361,45 +190,6 @@ def logout():
 @app.route('/admin')
 def admin():
     return render_template('administracao.html')
-
-class Contrato(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    numero_contrato = db.Column(db.String(50), nullable=False)
-    data_inicio = db.Column(db.String(10), nullable=False)
-    data_fim = db.Column(db.String(10), nullable=False)
-    assinaturas = db.Column(db.String(100), nullable=True)
-    status_contrato = db.Column(db.Boolean, default=False)
-    descricao_contrato = db.Column(db.Text, nullable=True)
-
-    def _init_(self, numero_contrato, data_inicio, data_fim, descricao_contrato):
-        self.numero_contrato = numero_contrato
-        self.data_inicio = data_inicio
-        self.data_fim = data_fim
-        self.descricao_contrato = descricao_contrato
-
-    def rescindir_contrato(self):
-        if self.status_contrato:
-            self.status_contrato = False
-        else:
-            return "O contrato já está rescindido."
-
-    def assinar_contrato(self, assinatura):
-        if not self.assinaturas:
-            self.assinaturas = assinatura
-            self.status_contrato = True
-        else:
-            return "O contrato já foi assinado."
-
-    def atualizar_contrato(self, nova_descricao):
-        self.descricao_contrato = nova_descricao
-
-    def renovar_contrato(self, nova_data_fim):
-        data_atual = datetime.strptime(self.data_fim, "%Y-%m-%d")
-        nova_data = datetime.strptime(nova_data_fim, "%Y-%m-%d")
-        if nova_data > data_atual:
-            self.data_fim = nova_data_fim
-        else:
-            return "A nova data de fim deve ser posterior à data atual."
 
 @app.route('/contratos')
 def contratos():
@@ -514,29 +304,6 @@ def empresaparceira():
 def empresacliente():
     return render_template('empresacliente.html')
 
-class EntidadeExterna(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    razao_social = db.Column(db.String(100), nullable=False)
-    cnpj = db.Column(db.String(14), nullable=False, unique=True)
-    faturamento = db.Column(db.Float, nullable=False)
-    recorrencia = db.Column(db.String(50), nullable=False)
-
-    def __init__(self, razao_social, cnpj, faturamento, recorrencia):
-        self.razao_social = razao_social
-        self.cnpj = cnpj
-        self.faturamento = faturamento
-        self.recorrencia = recorrencia
-
-    def editar_entidade(self, nova_razao_social=None, novo_cnpj=None, novo_faturamento=None, nova_recorrencia=None):
-        if nova_razao_social:
-            self.razao_social = nova_razao_social
-        if novo_cnpj:
-            self.cnpj = novo_cnpj
-        if novo_faturamento is not None:
-            self.faturamento = novo_faturamento
-        if nova_recorrencia:
-            self.recorrencia = nova_recorrencia
-
 @app.route('/entidades')
 def entidades():
     entidades = EntidadeExterna.query.all()
@@ -613,79 +380,6 @@ def excluir_projeto(id):
         flash("Projeto não encontrado.", 'danger')
     return redirect(url_for('gerenciar_projetos'))
 
-class Pessoas:
-    def __init__(self, nome, cpf, cnpj, email, celular, endereco, nascimento, atribuicao):
-        self.nome = nome
-        self.__cpf = cpf
-        self.__cnpj = cnpj
-        self.__email = email
-        self.__celular = celular
-        self.__endereco = endereco
-        self.__nascimento = nascimento
-        self.atribuicao = atribuicao
-        self.cadastro = []
-
-    @property
-    def cpf(self):
-     return self.__cpf
-
-    @cpf.setter
-    def cpf(self, cpf):
-     self.__cpf = cpf
-
-    @property
-    def cnpj(self):
-     return self.__cnpj
-
-    @cnpj.setter
-    def cnpj(self, cnpj):
-     self.__cnpj = cnpj
-
-    @property
-    def email(self):
-     return self.__email
-
-    @email.setter
-    def email(self, email):
-     self.__email = email
-
-    @property
-    def celular(self):
-     return self.__celular
-
-    @celular.setter
-    def celular(self, celular):
-     self.__celular = celular
-
-    @property
-    def endereco(self):
-      return self.__endereco
-
-    @endereco.setter
-    def endereco(self, endereco):
-      self.__endereco = endereco
-
-    @property
-    def nascimento(self):
-      return self.__nascimento
-
-    @nascimento.setter
-    def nascimento(self, nascimento):
-     self.__nascimento = nascimento
-
-    def registrar(self):
-        self.cadastro.append({
-            "nome": self.nome,
-            "cpf": self.__cpf,
-            "cnpj": self.__cnpj,
-            "email": self.__email,
-            "celular": self.__celular,
-            "endereco": self.__endereco,
-            "nascimento": self.__nascimento,
-            "atribuicao": self.atribuicao
-        })
-        print(f"Pessoa {self.nome} registrada com sucesso!")
-
 @app.route('/pessoas', methods=['GET', 'POST'])
 def cadastrar_pessoas():
     if request.method == 'POST':
@@ -711,37 +405,6 @@ def cadastrar_pessoas():
 
     return render_template('pessoas.html')
 
-class Funcionarios(Pessoas):
-    def __init__(self, nome, cpf, cnpj, email, celular, endereco, nascimento, atribuicao, cargo, salario, ocupacao, modelo_de_trabalho):
-        super().__init__( nome, cpf, cnpj, email, celular, endereco, nascimento, atribuicao)
-        self.cargo = cargo
-        self.__salario = salario
-        self.ocupacao = ocupacao
-        self.__modelo_de_trabalho = modelo_de_trabalho
-        self.__funcionarios = []
-
-    @property
-    def salario(self):
-        return self.__salario
-
-    @salario.setter
-    def alterar_salario(self, salario):
-        self.__salario = salario
-
-    @property
-    def modelo_de_trabalho(self):
-        return self.__modelo_de_trabalho
-
-    @modelo_de_trabalho.setter
-    def modelo_de_trabalho(self, modelo_de_trabalho):
-        self.__modelo_de_trabalho = modelo_de_trabalho
-
-    def admitir_funcionario(self, funcionario):
-        if not isinstance(funcionario, Funcionarios):
-            raise TypeError("O objeto deve ser uma instância da classe Funcionarios.")
-        self.__funcionarios.append(funcionario)
-        print(f"Funcionário {funcionario.nome} admitido com sucesso!")
-
 @app.route('/employee', methods=['GET', 'POST'])
 def employee():
     if request.method == 'POST':
@@ -762,7 +425,7 @@ def employee():
             flash("Todos os campos obrigatórios devem ser preenchidos!", "danger")
             return redirect(url_for('employee'))
         try:
-            funcionario = Funcionarios(
+            funcionario = Funcionario(
                 nome=nome,
                 cpf=cpf,
                 cnpj=cnpj,
