@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="body-home">
+    <div class="maincontainer">
+        <div class="lottie-container">
+            <img src="static\datasheprer.svg " class="layoutimg" alt="Logo">
+        </div>
+        
+ 
+        <div class="container_login" id="login-form">
+            <div class="login-box">
+                <img class="logo" src="static/datasphere.svg" alt="">
+                <h3>Faça Login</h3>
+                <form action="/login" method="post">
+                    <div class="input-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" name="password" required placeholder="Digite sua senha">
+                    </div>
+                    <button type="submit" class="login-button">Entrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+        <footer>
+            <p>DataSphere - Todos os direitos reservados &copy; 2024</p>
+        </footer>
+
+    <script>
+        document.getElementById('login-btn').addEventListener('click', function() {
+            // Ocultar a animação, título e botão
+            document.querySelector('.lottie-container').classList.add('hide');
+            document.querySelector('h1').classList.add('hide');
+            document.getElementById('login-btn').classList.add('hide');
+
+            // Mostrar o formulário de login
+            document.getElementById('login-form').classList.add('active');
+        });
+    </script>
+    <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+</body>
+</html>

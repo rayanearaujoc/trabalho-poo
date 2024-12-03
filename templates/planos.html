@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Planos{% endblock %}
+
+{% block content %}
+<div class="servicos-container">
+    <div class="formulario-serviço">
+        <h2>Cadastrar Planos</h2>
+        <form method="POST" action="{{ url_for('planos') }}">
+            <div>
+                <label for="servico_id">Serviço:</label>
+                <select name="servico_id" id="servico_id">
+                    {% for servico in servicos %}
+                    <option value="{{ servico.id }}">{{ servico.nome_solucao }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="plano_atual">Plano:</label>
+                <input type="text" name="plano_atual" id="plano_atual" required>
+            </div>
+            <div>
+                <label for="preco_plano">Preço:</label>
+                <input type="number" step="0.01" name="preco_plano" id="preco_plano" required>
+            </div>
+            <div>
+                <label for="desconto">Desconto (%):</label>
+                <input type="number" name="desconto" step="0.01" placeholder="Digite o desconto em %">
+            </div>
+            <button type="submit"class="btn btn-primary">Cadastrar Plano</button>
+        </form>        
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Serviço</th>
+                <th>Plano</th>
+                <th>Preço</th>
+                <th>Desconto</th>
+                <th>Preço Final</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for plano in planos %}
+            <tr>
+                <td>{{ plano.servico.nome_solucao }}</td>
+                <td>{{ plano.plano_atual }}</td>
+                <td>{{ plano.preco_plano }}</td>
+                <td>{{ plano.desconto }}%</td>
+                <td>{{ plano.calcular_preco_final() }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('alterar_plano', plano_id=plano.id) }}">
+                        <button type="submit" class="btn btn-secondary">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

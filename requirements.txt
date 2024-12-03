@@ -1,0 +1,11 @@
+<<<<<<< HEAD
+flask
+Flask-SQLAlchemy
+SQLAlchemy
+requests
+=======
+flask
+Flask-SQLAlchemy
+SQLAlchemy
+requests
+>>>>>>> e0461b9fe8c1e4bdc431185477d65e94e08dfd48

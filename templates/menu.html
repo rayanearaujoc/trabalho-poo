@@ -1,0 +1,82 @@
+<body class="body-pd">
+    <header>
+        <div class="header">
+            <div class="logout-container">
+                <a href="{{ url_for('logout') }} " class="logout-container">
+                    <ion-icon name="log-out" class="log-out"></ion-icon>
+                    <span class="logout-text">Sair</span>
+                  </a>
+              </div>
+        </div>
+    </header>
+    <div class="l-navbar" id="navbar">
+        <nav class="nav">
+            <div>
+                <div class="nav__list">
+                <div class="nav__brand">
+                    <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
+                </div>
+
+                <img class="logo2" src="static/dataspherewhite.svg" alt="">
+
+
+                    <a href="{{ url_for('home') }}" class="nav__link">
+                        <ion-icon name="bar-chart-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Dashboard</span>
+                    </a>
+
+                    <div  class="nav__link collapse">
+                        <ion-icon name="construct-outline" class="nav__icon"></ion-icon>
+                        <a href="{{ url_for('servicos') }}" class="nav__name">Serviços</a>
+
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+
+                        <ul class="collapse__menu">
+                            <a href="{{ url_for('planos') }}" class="collapse__sublink">Planos</a>
+                        </ul>
+                    </div>
+
+                    <div class="nav__link collapse">
+                        <ion-icon name="construct-outline" class="nav__icon"></ion-icon>
+                        <a href="{{ url_for('admin') }}" class="nav__name">Administração</a>
+                    
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+                    
+                        <ul class="collapse__menu">
+                            <a href="{{ url_for('departamentos') }}" class="collapse__sublink">Departamentos</a>
+                        </ul>
+                    </div>
+                    
+
+                    <div class="nav__link collapse">
+                        <ion-icon name="people-outline" class="nav__icon"></ion-icon>
+                        <a href="{{ url_for('pessoas') }}" class="nav__name">Pessoas</a>
+
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+
+                        <ul class="collapse__menu">
+                            <a href="{{ url_for('employee') }}" class="collapse__sublink">Funcionários</a>
+                        </ul>
+                    </div>
+                    <div class="nav__link collapse">
+                        <ion-icon name="people-outline" class="nav__icon"></ion-icon>
+                        <a href="{{ url_for('entidade_externa') }}" class="nav__name">Entidades Externas</a>
+
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+
+                        <ul class="collapse__menu">
+                            <a href="{{ url_for('empresacliente') }}" class="collapse__sublink">Empresa Cliente</a>
+                            <a href="{{ url_for('empresaparceira') }}" class="collapse__sublink">Empresa Parceira</a>
+                        </ul>
+                    </div>
+                    <div class="nav__link collapse">
+                        <ion-icon name="people-outline" class="nav__icon"></ion-icon>
+                        <a href="{{ url_for('contratos') }}" class="nav__name">Contratos</a>
+                    </div>
+                    
+                </div>
+            </div>
+        </nav>
+    </div>
+    
+</body>

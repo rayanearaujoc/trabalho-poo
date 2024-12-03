@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Administração{% endblock %}
+
+{% block content %}
+<div class="adcfun-container">
+
+    <div class="formulario-departamento">
+        <h2>Adicionar Funcionário</h2>
+        <form method="POST" action="{{ url_for('adicionar_funcionario') }}">
+            <div class="form-group">
+                <label for="nome_funcionario">Nome do Funcionário</label>
+                <input type="text" class="form-control" name="nome_funcionario" required>
+            </div>
+            <div class="form-group">
+                <label for="email_funcionario">Email</label>
+                <input type="email" class="form-control" name="email_funcionario" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Adicionar</button>
+        </form>
+    </div>
+
+    <div class="formulario-departamento">
+        <h2>Remover Funcionário</h2>
+        <form method="POST" action="{{ url_for('remover_funcionario') }}">
+            <div class="form-group">
+                <label for="id_funcionario">ID do Funcionário</label>
+                <input type="text" class="form-control" name="id_funcionario" required>
+            </div>
+            <button type="submit" class="btn btn-danger">Remover</button>
+        </form>
+    </div>
+
+    <div class="formulario-departamento">
+        <h2>Enviar E-mail</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label for="email_destinatario">Email do Destinatário</label>
+                <input type="email" class="form-control" name="email_destinatario" required>
+            </div>
+            <div class="form-group">
+                <label for="mensagem_email">Mensagem</label>
+                <textarea class="form-control" name="mensagem_email" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+    </div>
+
+    <div class="formulario-departamento">
+        <h2>Consultar Funcionário</h2>
+        <form method="GET">
+            <div class="form-group">
+                <label for="id_funcionario_consulta">ID do Funcionário</label>
+                <input type="text" class="form-control" name="id_funcionario_consulta" required>
+            </div>
+            <button type="submit" class="btn btn-danger">Consultar</button>
+        </form>
+    </div>
+
+    <div class="formulario-departamento">
+        <h2>Planejar Reunião</h2>
+        <form method="POST" action="{{ url_for('planejar_reuniao') }}">
+            <div class="form-group">
+                <label for="assunto">Assunto</label>
+                <input type="text" class="form-control" name="assunto" required>
+            </div>
+            <div class="form-group">
+                <label for="convidados">Convidados</label>
+                <input type="text" class="form-control" name="convidados" required>
+            </div>
+            <div class="form-group">
+                <label for="data_reuniao">Data da Reunião</label>
+                <input type="date" class="form-control" name="data_reuniao" required>
+            </div>
+            <div class="form-group">
+                <label for="hora_reuniao">Hora da Reunião</label>
+                <input type="time" class="form-control" name="hora_reuniao" required>
+            </div>
+            <button type="submit" class="btn btn-danger">Planejar</button>
+        </form>
+    </div>
+
+    <div class="formulario-departamento">
+        <h2>Atualizar Orçamento</h2>
+        <form method="POST" action="{{ url_for('atualizar_orcamento') }}">
+            <button type="submit" class="btn btn-primary">Atualizar</button>
+        </form>
+    </div>
+
+    <div class="formulario-departamento">
+        <h2>Gerar Relatório</h2>
+        <form method="POST" action="{{ url_for('gerar_relatorio') }}">
+            <button type="submit" class="btn btn-primary">Gerar</button>
+        </form>
+    </div>
+</div>
+<div class="resposta-container">
+    <!-- Espaço reservado para as respostas -->
+    <h3>Respostas</h3>
+    <p>{{ mensagem }}</p>
+</div>
+</div>
+
+<div class="tabela-fun">
+    <table class="table">
+        <h2>Lista de Funcionários</h2>
+        <thead>
+            <tr>
+                <th>Nome do Funcionário</th>
+                <th>E-mail</th>
+                <th>ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for funcionario in funcionarios %}
+            <tr>
+                <td>{{ funcionario.nome }}</td>
+                <td>{{ funcionario.email }}</td>
+                <td>{{ funcionario.id }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

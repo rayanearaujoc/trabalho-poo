@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <div class="onlutwo">
+        <div class="card3">
+            <p><strong>Serviços Agendados</strong></p>
+            <h2 class="number-dash">{{ numero_servicos }}</h2>
+        </div>
+    
+        <div class="card3">
+            <p><strong>Planos Cadastrados</strong></p>
+            <h2 class="number-dash">{{ numero_planos }}</h2>
+        </div>
+
+        <div class="card3">
+            <p><strong>Contratos Feitos</strong></p>
+            <h2 class="number-dash">{{ numero_contratos }}</h2>  <!-- Exibe o total de contratos -->
+        </div>
+    </div>
+
+    <div class="card3">
+        <div class="special">
+            <p><strong>Total</strong></p>
+            <h3 class="numbertotal">R${{ "{:,.3f}".format(total_arrecadado).replace(',', 'X').replace('.', ',').replace('X', '.') }}</h3>
+        </div>
+    </div>
+</div>
+<div class="time-data">
+    <h2 class="time">Time DataSphere</h2>
+    <div class="conatainer-variavel">
+        <div class="funcionarios1">
+            <div class="big-column">
+                <div class="samllrow">
+                    <ion-icon name="people" class="home-icon"></ion-icon>
+                    <h1>{{ numero_funcionario }}</h1>
+                </div>
+                <button class="home-btn2" id="homeButton">+</button>
+            </div>
+            <div class="funcionario-textop">
+                <h4>Funcionários Cadastrados</h4>
+                <p>Os funcionários são a essência da Dataphere. Ter vocês no time é essencial para o nosso sucesso!</p>
+            </div>
+        </div>
+        <div class="funcionarios1 especila">
+            <div class="big-column">
+                <div class="samllrow">
+                    <ion-icon name="business" class="home-icon"></ion-icon>
+                    <h1>{{ numero_entidade }}</h1>
+                </div>
+                <button class="home-btn2" id="homeButton2">+</button>
+            </div>
+            <div class="funcionario-textop">
+                <h4>Entidades Externas Cadastradas</h4>
+                <p>Ter contatos externos é crucial para expandir nossa rede e fortalecer nossa posição no mercado.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('homeButton').addEventListener('click', function() {
+        window.location.href = '{{ url_for('admin') }}'; // Substitua "pagina.html" pela URL desejada
+    });
+
+    document.getElementById('homeButton2').addEventListener('click', function() {
+        window.location.href = '{{ url_for('entidade_externa') }}'; // Substitua "pagina.html" pela URL desejada
+    });
+</script>
+
+{% endblock %}
