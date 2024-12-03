@@ -186,7 +186,6 @@ def logout():
     session.pop('usuario', None)
     return redirect(url_for('index'))
 
-
 @app.route('/admin')
 def admin():
     return render_template('administracao.html')
@@ -247,13 +246,12 @@ def atualizar(id):
 @app.route('/projetos', methods=['GET', 'POST'])
 def gerenciar_projetos():
     if request.method == 'POST':
-        # Captura os dados do formulário
         nome_do_projeto = request.form.get('nome_do_projeto')
         objetivos = request.form.get('obj_met')
         membros = request.form.get('membros')
         data_termino = request.form.get('dt')
 
-        # Adiciona o projeto ao banco de dados
+
         novo_projeto = Projeto(
             nome_do_projeto=nome_do_projeto,
             objetivos=objetivos,
@@ -266,10 +264,9 @@ def gerenciar_projetos():
         flash(f"Projeto '{nome_do_projeto}' cadastrado com sucesso!", 'success')
         return redirect(url_for('gerenciar_projetos'))
 
-    # Exibe todos os projetos cadastrados
+
     projetos = Projeto.query.all()
     return render_template('departamentos.html', projetos=projetos)
-
 
 @app.route('/concluir_projeto/<int:id>', methods=['POST'])
 def concluir_projeto(id):
@@ -282,11 +279,9 @@ def concluir_projeto(id):
         flash("Projeto não encontrado.", 'danger')
     return redirect(url_for('gerenciar_projetos'))
 
-
 @app.route('/departamentos')
 def departamentos():
     return render_template('departamentos.html')
-
 
 @app.route('/entidade_externa')
 def entidade_externa():
@@ -294,7 +289,6 @@ def entidade_externa():
     if not entidades:
         flash("Nenhuma entidade cadastrada ainda.", 'info')
     return render_template('entidade-externa.html', entidades=entidades)
-
 
 @app.route('/empresaparceira')
 def empresaparceira():
@@ -368,7 +362,6 @@ def excluir_entidade(id):
         flash("Entidade não encontrada.", 'danger')
     return redirect(url_for('entidades'))
 
-
 @app.route('/excluir_projeto/<int:id>', methods=['POST'])
 def excluir_projeto(id):
     projeto = Projeto.query.get(id)
@@ -394,14 +387,14 @@ def cadastrar_pessoas():
 
         if not all([nome, cpf, cnpj, email, celular, endereco, nascimento, atribuicao]):
             flash("Todos os campos são obrigatórios!", "danger")
-            return render_template('pessoas.html')  # Não redireciona, renderiza a página novamente
+            return render_template('pessoas.html')
 
         pessoa = Pessoas(nome, cpf, cnpj, email, celular, endereco, nascimento, atribuicao)
         pessoa.registrar()
 
-        # Flash para exibição do popup
+ 
         flash(f"Pessoa {nome} registrada com sucesso!", "success")
-        return render_template('pessoas.html')  # Renderiza novamente a página com a mensagem
+        return render_template('pessoas.html')
 
     return render_template('pessoas.html')
 
