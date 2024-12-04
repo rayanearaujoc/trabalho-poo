@@ -202,7 +202,6 @@ def funcionarios_view():
     funcionarios = Funcionario.query.all()
     return render_template('administracao.html', funcionarios=funcionarios)
 
-
 @app.route('/admin')
 def admin():
     return render_template('administracao.html')
