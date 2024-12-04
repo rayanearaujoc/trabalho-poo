@@ -43,6 +43,7 @@ body{
   align-items: center;
   padding: 80px;
   margin: 0;
+  margin-bottom: 40px;
   min-height: 100vh;
   background-color: #ecebeb;
  
@@ -76,6 +77,19 @@ body{
   border-radius: 7px;
 }
 
+.dp2{
+  display: flex;
+  flex-direction: row;
+}
+
+.cadastro{
+  display: flex;
+  font-family: var(--body-font);
+  font-size: 14px;
+  color: var(--bg-color);
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
 footer {
   background-color: var(--bg-color);
@@ -152,7 +166,7 @@ footer {
   flex-direction: row;
   background-color: #e7e7e7;
   width: 800px;  
-  height: 450px;
+  height: 500px;
   border-radius: 15px;
   padding: 0;
   overflow: hidden; 
@@ -168,6 +182,75 @@ footer {
   align-items: center;
   width: 50%; 
   height: 100%;  
+
+}
+
+.servicos-container{
+  display: flex;
+  flex-direction: row;
+}
+
+.formulario-serviço{
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin: 10px;
+  border-radius: 20px;
+  background-color: #fafafa;
+  margin: 30px;
+}
+
+.formulario-serviço2{
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #fafafa;
+  margin: 20px;
+  display:flex;
+  margin: auto;
+  margin-bottom: 60px;
+}
+
+.formulario-serviço3{
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin: 10px;
+  border-radius: 20px;
+  background-color: #fafafa;
+  margin: 30px;
+  margin-bottom: 60px;
+
+}
+
+.empresa-parecira{
+  display: flex;
+  flex-direction: row;
+ }
+ 
+ .empresa-parecira2{
+  display: flex;
+  flex-direction: column;
+ }
+
+.formulario-serviço4{
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin: 10px;
+  border-radius: 20px;
+  background-color: #fafafa;
+  margin: 30px;
+  margin-bottom: 60px;
 
 }
 
@@ -258,7 +341,6 @@ input {
   cursor: pointer; 
   transition: background-color 0.3s;
   font-family: var(--body-font);
-  margin-top: 5px;
   font-size: 16px;
 }
 
@@ -807,6 +889,16 @@ td[colspan="5"] {
   align-items: right;
   position: relative;
   margin-top: 20px;
+}
+
+.tabela-fun2 {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 20px;
+  padding-right: 15px;
+  align-items: right;
+  position: relative;
 }
 .table {
   width: 100%; 

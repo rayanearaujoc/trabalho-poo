@@ -12,7 +12,7 @@ from departamentos import Projeto
 from entidadeexterna import EntidadeExterna
 
 app = Flask(__name__)
-app.secret_key = 'amoprogramar:)'
+app.secret_key = 'amoprogramar'
 
 usuarios = {
     'rayane@datasphere.com': 'senha123',
@@ -31,6 +31,64 @@ db.init_app(app)
     
 with app.app_context():
     db.create_all()
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.form['email']
+    senha = request.form['password']
+
+    if email in usuarios and usuarios[email] == senha:
+        session['usuario'] = email
+        return redirect(url_for('home'))
+    else:
+        flash('E-mail ou senha inválidos. Tente novamente.')
+        return redirect(url_for('index'))
+    
+@app.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
+    if request.method == 'POST':
+        email_cadastro = request.form['email_cadastro']
+        senha = request.form['password']
+        confirmar_senha = request.form['confirm_password']
+
+        if email_cadastro in usuarios:
+            flash('E-mail já cadastrado. Faça login ou use outro e-mail.')
+            return redirect(url_for('cadastro'))
+
+        if senha != confirmar_senha:
+            flash('As senhas não coincidem. Tente novamente.')
+            return redirect(url_for('cadastro'))
+
+        usuarios[email_cadastro] = senha
+        flash('Cadastro realizado com sucesso! Faça login.')
+        return redirect(url_for('home'))
+    
+    return render_template('cadastro.html')
+    
+@app.route('/home')
+def home():
+    if 'usuario' not in session:
+        return redirect(url_for('index'))
+    
+    numero_servicos = Servico.query.count()
+    numero_planos = Planos.query.count()
+    numero_contratos = Contrato.query.count()
+    numero_funcionario= Funcionario.query.count()
+    numero_entidade=EntidadeExterna.query.count()
+    total_arrecadado = db.session.query(
+        func.sum(Planos.preco_plano * (1 - Planos.desconto / 100))
+    ).scalar() or 0  
+    
+    return render_template(
+        'home.html',
+        numero_servicos=numero_servicos,
+        numero_planos=numero_planos,numero_contratos=numero_contratos, 
+        total_arrecadado=total_arrecadado, numero_funcionario=numero_funcionario,numero_entidade=numero_entidade
+    )
 
 @app.route('/servicos', methods=['GET', 'POST'])
 def servicos():
@@ -129,9 +187,9 @@ def adicionar_funcionario():
 
 @app.route('/remover_funcionario', methods=['POST'])
 def remover_funcionario():
-    id_funcionario = request.form.get('id_funcionario')  # Obtém o ID do formulário
+    id_funcionario = request.form.get('id_funcionario')  
     
-    if id_funcionario:  # Verifica se o ID foi fornecido
+    if id_funcionario:  
         Administracao.remover_funcionario(id_funcionario)
         flash(f"Funcionário com ID {id_funcionario} removido com sucesso!", 'success')
     else:
@@ -144,47 +202,6 @@ def funcionarios_view():
     funcionarios = Funcionario.query.all()
     return render_template('administracao.html', funcionarios=funcionarios)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/login', methods=['POST'])
-def login():
-    email = request.form['email']
-    senha = request.form['password']
-
-    if email in usuarios and usuarios[email] == senha:
-        session['usuario'] = email
-        return redirect(url_for('home'))
-    else:
-        flash('E-mail ou senha inválidos. Tente novamente.')
-        return redirect(url_for('index'))
-    
-@app.route('/home')
-def home():
-    if 'usuario' not in session:
-        return redirect(url_for('index'))
-    
-    numero_servicos = Servico.query.count()
-    numero_planos = Planos.query.count()
-    numero_contratos = Contrato.query.count()
-    numero_funcionario= Funcionario.query.count()
-    numero_entidade=EntidadeExterna.query.count()
-    total_arrecadado = db.session.query(
-        func.sum(Planos.preco_plano * (1 - Planos.desconto / 100))
-    ).scalar() or 0  
-    
-    return render_template(
-        'home.html',
-        numero_servicos=numero_servicos,
-        numero_planos=numero_planos,numero_contratos=numero_contratos, 
-        total_arrecadado=total_arrecadado, numero_funcionario=numero_funcionario,numero_entidade=numero_entidade
-    )
-
-@app.route('/logout')
-def logout():
-    session.pop('usuario', None)
-    return redirect(url_for('index'))
 
 @app.route('/admin')
 def admin():
@@ -440,6 +457,11 @@ def employee():
         return redirect(url_for('employee'))
 
     return render_template('funcionarios.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('usuario', None)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     with app.app_context():

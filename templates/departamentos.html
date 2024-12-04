@@ -5,8 +5,8 @@
 {% block content %}
 <div class="dp">
     <div class="dp2"> 
-        <h2>Departamento</h2>
         <form method="POST" class="formulario-serviço">
+            <h2>Adicionar Departamento</h2>
             <div class="form-group">
                 <label for="nome">Nome do departamento</label>
                 <input type="text" class="form-control" name="nome" required>
@@ -33,7 +33,7 @@
     </div>
     <div class="servicos-container">
         <div class="formulario-serviço"> 
-            <h2>Projeto</h2>
+            <h2>Adicionar Projeto</h2>
             <form method="POST" action="{{ url_for('gerenciar_projetos') }}">
                 <div class="form-group">
                     <label for="nome_do_projeto">Nome do projeto</label>
@@ -57,7 +57,7 @@
             </form>
         </div>
         
-    <div class="tabela-projetos">
+    <div class="tabela-fun">
             <h2>Projetos Cadastrados</h2>
             <table class="table">
                 <thead>

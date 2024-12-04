@@ -12,7 +12,6 @@
         <div class="lottie-container">
             <img src="static\datasheprer.svg " class="layoutimg" alt="Logo">
         </div>
-        
  
         <div class="container_login" id="login-form">
             <div class="login-box">
@@ -28,6 +27,7 @@
                         <input type="password" id="password" name="password" required placeholder="Digite sua senha">
                     </div>
                     <button type="submit" class="login-button">Entrar</button>
+                    <a href="{{ url_for('cadastro') }}" class="cadastro"> Não tem Conta? Cadastre-se</a>
                 </form>
             </div>
         </div>
@@ -36,18 +36,6 @@
         <footer>
             <p>DataSphere - Todos os direitos reservados &copy; 2024</p>
         </footer>
-
-    <script>
-        document.getElementById('login-btn').addEventListener('click', function() {
-            // Ocultar a animação, título e botão
-            document.querySelector('.lottie-container').classList.add('hide');
-            document.querySelector('h1').classList.add('hide');
-            document.getElementById('login-btn').classList.add('hide');
-
-            // Mostrar o formulário de login
-            document.getElementById('login-form').classList.add('active');
-        });
-    </script>
     <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
 </body>
 </html>

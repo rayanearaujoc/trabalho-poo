@@ -3,66 +3,65 @@
 {% block title %}Administração{% endblock %}
 
 {% block content %}
-<h1>Lista de Contratos</h1>
-
-<!-- Formulário para adicionar um novo contrato -->
-<form action="{{ url_for('adicionar_contrato') }}" method="POST" class="formulario-serviço">
-    <h2>Adicionar Novo Contrato</h2>
-    <input type="text" name="numero_contrato" placeholder="Número do Contrato" required>
-    <input type="date" name="data_inicio" placeholder="Data de Início" required>
-    <input type="date" name="data_fim" placeholder="Data de Fim" required>
-    <input type="text" name="descricao_contrato" placeholder="Descrição do Contrato" required>
-    <button type="submit" class="btn-primary3">Criar Contrato</button>
-</form>
-
-<!-- Tabela para exibir contratos existentes -->
-<table border="1" cellspacing="0" cellpadding="8" style="width: 100%; margin-top: 20px;">
-    <thead>
-        <tr>
-            <th>Número</th>
-            <th>Data de Início</th>
-            <th>Data de Fim</th>
-            <th>Status</th>
-            <th>Assinaturas</th>
-            <th>Descrição</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for contrato in contratos %}
-        <tr>
-            <td>{{ contrato.numero_contrato }}</td>
-            <td>{{ contrato.data_inicio }}</td>
-            <td>{{ contrato.data_fim }}</td>
-            <td>{{ 'Ativo' if contrato.status_contrato else 'Rescindido' }}</td>
-            <td>{{ contrato.assinaturas or 'Nenhuma' }}</td>
-            <td>{{ contrato.descricao_contrato }}</td>
-            <td>
-                <!-- Formulário para assinar contrato -->
-                <form action="{{ url_for('assinar', id=contrato.id) }}" method="POST" style="display:inline;">
-                    <input type="text" name="assinatura" placeholder="Assinatura">
-                    <button type="submit"class="teblea-btn">Assinar</button>
-                </form>
-
-                <!-- Formulário para rescindir contrato -->
-                <form action="{{ url_for('rescindir', id=contrato.id) }}" method="POST" style="display:inline;">
-                    <button type="submit"class="teblea-btn">Rescindir</button>
-                </form>
-
-                <!-- Formulário para renovar contrato -->
-                <form action="{{ url_for('renovar', id=contrato.id) }}" method="POST" style="display:inline;">
-                    <input type="date" name="nova_data_fim" placeholder="Nova Data de Fim">
-                    <button type="submit"class="teblea-btn btn-tablea-esp">Renovar</button>
-                </form>
-
-                <!-- Formulário para atualizar descrição do contrato -->
-                <form action="{{ url_for('atualizar', id=contrato.id) }}" method="POST" style="display:inline;">
-                    <input type="text" name="nova_descricao" placeholder="Nova Descrição">
-                    <button type="submit"class="teblea-btn">Atualizar</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="empresa-parecira2">
+    <div class="formulario-serviço3">
+        <form action="{{ url_for('adicionar_contrato') }}" method="POST" >
+            <h2>Adicionar Novo Contrato</h2>
+            <input type="text" name="numero_contrato" placeholder="Número do Contrato" required>
+            <input type="date" name="data_inicio" placeholder="Data de Início" required>
+            <input type="date" name="data_fim" placeholder="Data de Fim" required>
+            <input type="text" name="descricao_contrato" placeholder="Descrição do Contrato" required>
+            <button type="submit" class="btn-primary3">Criar Contrato</button>
+        </form>
+    </div>
+    <div class="tabela-fun2">
+        <table  style="width: 100%; margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                    <th>Status</th>
+                    <th>Assinaturas</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contrato in contratos %}
+                <tr>
+                    <td>{{ contrato.numero_contrato }}</td>
+                    <td>{{ contrato.data_inicio }}</td>
+                    <td>{{ contrato.data_fim }}</td>
+                    <td>{{ 'Ativo' if contrato.status_contrato else 'Rescindido' }}</td>
+                    <td>{{ contrato.assinaturas or 'Nenhuma' }}</td>
+                    <td>{{ contrato.descricao_contrato }}</td>
+                    <td>
+                        <form action="{{ url_for('assinar', id=contrato.id) }}" method="POST" style="display:inline;">
+                            <input type="text" name="assinatura" placeholder="Assinatura">
+                            <button type="submit"class="teblea-btn">Assinar</button>
+                        </form>
+        
+                        <form action="{{ url_for('rescindir', id=contrato.id) }}" method="POST" style="display:inline;">
+                            <button type="submit"class="teblea-btn">Rescindir</button>
+                        </form>
+        
+                
+                        <form action="{{ url_for('renovar', id=contrato.id) }}" method="POST" style="display:inline;">
+                            <input type="date" name="nova_data_fim" placeholder="Nova Data de Fim">
+                            <button type="submit"class="teblea-btn btn-tablea-esp">Renovar</button>
+                        </form>
+        
+                    
+                        <form action="{{ url_for('atualizar', id=contrato.id) }}" method="POST" style="display:inline;">
+                            <input type="text" name="nova_descricao" placeholder="Nova Descrição">
+                            <button type="submit"class="teblea-btn">Atualizar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

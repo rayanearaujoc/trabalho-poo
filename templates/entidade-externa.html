@@ -3,60 +3,62 @@
 {% block title %}Entidades{% endblock %}
 
 {% block content %}
-<h1>Lista de Entidades Externas</h1>
+<div class="empresa-parecira">
+    <form action="{{ url_for('adicionar_entidade') }}" class="formulario-serviço3" method="POST" style="margin-bottom: 20px;">
+        <h2>Adicionar Nova Entidade</h2>
+        <input type="text" name="razao_social" placeholder="Razão Social" required>
+        <input type="text" name="cnpj" placeholder="CNPJ" required>
+        <input type="number" step="0.01" name="faturamento" placeholder="Faturamento" required>
+        <input type="text" name="recorrencia" placeholder="Recorrência" required>
+        <button type="submit" class="btn-primary3">Criar Entidade</button>
+    </form>
+    
+    <!-- Tabela de entidades -->
+     <div class="tabela-fun">
+        <h2>Entidades Externas</h2>
+        <table  cellspacing="0" cellpadding="8" style="width: 100%; margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th>Razão Social</th>
+                    <th>CNPJ</th>
+                    <th>Faturamento</th>
+                    <th>Recorrência</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if entidades %}
+                    {% for entidade in entidades %}
+                    <tr>
+                        <td>{{ entidade.razao_social }}</td>
+                        <td>{{ entidade.cnpj }}</td>
+                        <td>R${{ entidade.faturamento }}</td>
+                        <td>{{ entidade.recorrencia }}</td>
+                        <td>
+                            <!-- Form para editar -->
+                            <form action="{{ url_for('editar_entidade', id=entidade.id) }}" method="POST" style="display:inline;">
+                                <input type="text" name="razao_social" placeholder="Nova Razão Social">
+                                <input type="text" name="cnpj" placeholder="Novo CNPJ">
+                                <input type="number" step="0.01" name="faturamento" placeholder="Novo Faturamento">
+                                <input type="text" name="recorrencia" placeholder="Nova Recorrência">
+                                <button type="submit" class="teblea-btn">Editar</button>
+                            </form>
+        
+                            <!-- Form para excluir -->
+                            <form action="{{ url_for('excluir_entidade', id=entidade.id) }}" method="POST" style="display:inline;">
+                                <button type="submit"class="teblea-btn">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align:center;">Nenhuma entidade cadastrada.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-
-<!-- Formulário para adicionar nova entidade -->
-<form action="{{ url_for('adicionar_entidade') }}" class="formulario-serviço" method="POST" style="margin-bottom: 20px;">
-    <h2>Adicionar Nova Entidade</h2>
-    <input type="text" name="razao_social" placeholder="Razão Social" required>
-    <input type="text" name="cnpj" placeholder="CNPJ" required>
-    <input type="number" step="0.01" name="faturamento" placeholder="Faturamento" required>
-    <input type="text" name="recorrencia" placeholder="Recorrência" required>
-    <button type="submit" class="btn-primary3">Criar Entidade</button>
-</form>
-
-<!-- Tabela de entidades -->
-<table  cellspacing="0" cellpadding="8" style="width: 100%; margin-top: 20px;">
-    <thead>
-        <tr>
-            <th>Razão Social</th>
-            <th>CNPJ</th>
-            <th>Faturamento</th>
-            <th>Recorrência</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% if entidades %}
-            {% for entidade in entidades %}
-            <tr>
-                <td>{{ entidade.razao_social }}</td>
-                <td>{{ entidade.cnpj }}</td>
-                <td>R${{ entidade.faturamento }}</td>
-                <td>{{ entidade.recorrencia }}</td>
-                <td>
-                    <!-- Form para editar -->
-                    <form action="{{ url_for('editar_entidade', id=entidade.id) }}" method="POST" style="display:inline;">
-                        <input type="text" name="razao_social" placeholder="Nova Razão Social">
-                        <input type="text" name="cnpj" placeholder="Novo CNPJ">
-                        <input type="number" step="0.01" name="faturamento" placeholder="Novo Faturamento">
-                        <input type="text" name="recorrencia" placeholder="Nova Recorrência">
-                        <button type="submit" class="teblea-btn">Editar</button>
-                    </form>
-
-                    <!-- Form para excluir -->
-                    <form action="{{ url_for('excluir_entidade', id=entidade.id) }}" method="POST" style="display:inline;">
-                        <button type="submit"class="teblea-btn">Excluir</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        {% else %}
-        <tr>
-            <td colspan="5" style="text-align:center;">Nenhuma entidade cadastrada.</td>
-        </tr>
-        {% endif %}
-    </tbody>
-</table>
 {% endblock %}
