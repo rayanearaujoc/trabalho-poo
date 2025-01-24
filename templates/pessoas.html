@@ -4,16 +4,6 @@
 
 {% block content %}
  <div> 
-    <script>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    alert("{{ message }}"); // Exibe a mensagem como popup
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </script>
-
     <div class="formulario-serviço2">
         <h2>Cadastrar Pessoa</h2>
         <form method="POST" action="{{ url_for('cadastrar_pessoas') }}">

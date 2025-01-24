@@ -28,9 +28,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-    
-with app.app_context():
-    db.create_all()
 
 @app.route('/')
 def index():
@@ -48,7 +45,7 @@ def login():
         flash('E-mail ou senha inválidos. Tente novamente.')
         return redirect(url_for('index'))
     
-@app.route('/cadastro', methods=['GET', 'POST'])
+@app.route('/cadastro', methods=['GET','POST'])
 def cadastro():
     if request.method == 'POST':
         email_cadastro = request.form['email_cadastro']
@@ -114,7 +111,7 @@ def servicos():
     servicos_agendados = Servico.query.all() 
     return render_template('servicos.html', servicos=servicos_agendados)
 
-@app.route('/planos', methods=['GET', 'POST'])
+@app.route('/planos', methods=['GET','POST'])
 def planos():
     if request.method == 'POST':
         try:
@@ -152,7 +149,7 @@ def alterar_plano(plano_id):
     
     return redirect('/planos') 
 
-@app.route('/admin', methods=['GET', 'POST'])
+@app.route('/admin',methods=['GET'])
 def admin_dashboard():
     if 'usuario' not in session:
         return redirect(url_for('index')) 
